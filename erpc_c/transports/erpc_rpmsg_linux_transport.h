@@ -8,7 +8,7 @@
 
 /* Download "rpmsg_linux_endpoint.h/.cpp" from
  * https://github.com/EmbeddedRPC/erpc-imx-demos/tree/master/middleware/rpmsg-cpp */
-#include "erpc_rpmsg_linux_endpoint.h"
+#include "rpmsg_linux_endpoint.h"
 #include "erpc_transport.h"
 
 ////////////////////////////////////////////////////////////////////////////////
