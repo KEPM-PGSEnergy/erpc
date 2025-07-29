@@ -33,6 +33,16 @@ static ManuallyConstructed<TransportArbitrator> s_arbitrator;
 static ManuallyConstructed<BasicCodec> s_codec;
 static ManuallyConstructed<Crc16> s_crc16;
 
+// global client variables
+static ManuallyConstructed<ArbitratedClientManager> s_client_PC;
+ClientManager *g_client_PC = NULL;
+
+static ManuallyConstructed<BasicCodecFactory> s_codecFactory_PC;
+static ManuallyConstructed<TransportArbitrator> s_arbitrator_PC;
+static ManuallyConstructed<BasicCodec> s_codec_PC;
+static ManuallyConstructed<Crc16> s_crc16_PC;
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Code
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +74,35 @@ erpc_transport_t erpc_arbitrated_client_init(erpc_transport_t transport, erpc_mb
 
     return reinterpret_cast<erpc_transport_t>(s_arbitrator.get());
 }
+
+erpc_transport_t erpc_arbitrated_client_init_PC(erpc_transport_t transport, erpc_mbf_t message_buffer_factory)
+{
+    assert(transport);
+
+    // Init factories.
+    s_codecFactory_PC.construct();
+
+    // Create codec used by the arbitrator.
+    s_codec_PC.construct();
+
+    // Init the arbitrator using the passed in transport.
+    s_arbitrator_PC.construct();
+    Transport *castedTransport = reinterpret_cast<Transport *>(transport);
+    s_crc16_PC.construct();
+    castedTransport->setCrc16(s_crc16_PC.get());
+    s_arbitrator_PC->setSharedTransport(castedTransport);
+    s_arbitrator_PC->setCodec(s_codec_PC);
+
+    // Init the client manager.
+    s_client_PC.construct();
+    s_client_PC->setArbitrator(s_arbitrator_PC);
+    s_client_PC->setCodecFactory(s_codecFactory_PC);
+    s_client_PC->setMessageBufferFactory(reinterpret_cast<MessageBufferFactory *>(message_buffer_factory));
+    g_client_PC = s_client_PC;
+
+    return reinterpret_cast<erpc_transport_t>(s_arbitrator_PC.get());
+}
+
 
 void erpc_arbitrated_client_set_error_handler(client_error_handler_t error_handler)
 {

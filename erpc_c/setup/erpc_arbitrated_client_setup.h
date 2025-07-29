@@ -58,6 +58,8 @@ extern "C" {
  */
 erpc_transport_t erpc_arbitrated_client_init(erpc_transport_t transport, erpc_mbf_t message_buffer_factory);
 
+erpc_transport_t erpc_arbitrated_client_init_PC(erpc_transport_t transport, erpc_mbf_t message_buffer_factory);
+
 /*!
  * @brief This function sets error handler function.
  *
