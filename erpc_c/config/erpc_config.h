@@ -68,7 +68,7 @@
 //!
 //! Uncomment to change the count of buffers allocated by one of statically allocated messages.
 //! Default value is set to 2.
-#define ERPC_DEFAULT_BUFFERS_COUNT (4)//vf 256 workable if uses on 2 sides
+#define ERPC_DEFAULT_BUFFERS_COUNT (256)//vf 256 workable if uses on 2 sides
 
 //! @def ERPC_NOEXCEPT
 //!
